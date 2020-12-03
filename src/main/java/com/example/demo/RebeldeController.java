@@ -26,6 +26,9 @@ public class RebeldeController {
 	public rebelde rebels(@RequestParam(value="rebelde", defaultValue = "-") String rebelde,
 						  @RequestParam(value="planeta", defaultValue = "-") String planeta) {
 		
+		rebelde result = new rebelde("-", "-", "-", "Introduce un rebelde y un planeta correctos porfavor");
+		
+		try {
 		//Recojemos la fecha en milisegundos
 		System.currentTimeMillis();
 		
@@ -37,8 +40,25 @@ public class RebeldeController {
 		
 		//Le damos formato a la fecha
 		String date = formatter.format(d);
-       
-				return new rebelde(rebelde, planeta, date, String.format(frase, rebelde, planeta, date));
+        
+		//Control de errores (Que no entren a la raíz sin nada)
+		if(!rebelde.equals("-") && !planeta.equals("-")) {
+			return new rebelde(capitalize(rebelde), capitalize(planeta), date, String.format(frase, capitalize(rebelde), capitalize(planeta), date));
 		}
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		return result;
+		
+		}
+	
+	//Metodo para poner la primera letra del nombre del rebelde/planeta en mayúscula
+	public static String capitalize(String str) {
+	    if(str == null || str.isEmpty()) {
+	        return str;
+	    }
+
+	    return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
 
 }
