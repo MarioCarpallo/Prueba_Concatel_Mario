@@ -1,6 +1,9 @@
 package com.example.demo;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
@@ -12,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class RebeldeController {
 	
 	//Frase la cual tendrá 3 variables, el rebelde, planeta, y fecha.
-	private static final String frase = "El rebelde %s fue avistado en el planeta %s en la fecha %s";
-	
-	
+	private static final String frase = "El rebelde %s fue avistado en el planeta %s el día %s";
+		
 	//Mensaje donde explica donde ir para introducir los rebeldes
 	@RequestMapping("/")
 	public String saludo() {
 		return "Para introducir nuevos rebeldes dirijase a /rebels";
+
 	}
 	
 	//Metodo para poder introducir el rebelde y el planeta con el RequestParam
@@ -41,9 +44,13 @@ public class RebeldeController {
 		//Le damos formato a la fecha
 		String date = formatter.format(d);
         
-		//Control de errores (Que no entren a la raíz sin nada)
+		//Control de errores (Que no entren a la raíz de la api sin nada)
 		if(!rebelde.equals("-") && !planeta.equals("-")) {
-			return new rebelde(capitalize(rebelde), capitalize(planeta), date, String.format(frase, capitalize(rebelde), capitalize(planeta), date));
+			String fraseFichero = String.format(frase, capitalize(rebelde), capitalize(planeta), date);
+			
+			fichero(fraseFichero);
+			
+			return new rebelde(capitalize(rebelde), capitalize(planeta), date, fraseFichero);
 		}
 		}catch(Exception e) {
 			System.out.println(e);
@@ -60,5 +67,26 @@ public class RebeldeController {
 
 	    return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
+	
+	public static String fichero(String frase) {
+		String ficheroReturn = "Escrito con éxito";
+		
+		try {
+			String ruta = "output_rebeldes/rebeldes.txt";
+			File archivo = new File(ruta);
+			BufferedWriter bw;
+			bw = new BufferedWriter(new FileWriter(archivo, true));
+			if(archivo.exists()) {
+			    bw.write(frase+"\n");
+			    bw.close();
+			}
+		}catch(Exception e) {
+			ficheroReturn = "Hubo algún problema: "+e;
+			System.out.print("Hubo algún problema: "+e);
+		}
+		return ficheroReturn;
+	}
+	
+	
 
 }
