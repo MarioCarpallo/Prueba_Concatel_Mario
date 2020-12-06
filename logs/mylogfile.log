@@ -1,0 +1,4 @@
+INFO  com.example.demo.RebeldeController: Testing para Info
+WARN  com.example.demo.RebeldeController: Testing para Aviso
+ERROR com.example.demo.RebeldeController: Testing para error
+FATAL com.example.demo.RebeldeController: Testing para Fatal

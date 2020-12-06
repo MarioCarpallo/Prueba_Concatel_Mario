@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +18,15 @@ public class RebeldeController {
 	//Frase la cual tendrá 3 variables, el rebelde, planeta, y fecha.
 	private static final String frase = "El rebelde %s fue avistado en el planeta %s el día %s";
 		
+	final Logger logger = Logger.getLogger(RebeldeController.class);
 	//Mensaje donde explica donde ir para introducir los rebeldes
 	@RequestMapping("/")
 	public String saludo() {
+		logger.debug("Testing para Debug");
+		logger.info("Testing para Info");
+		logger.warn("Testing para Aviso");
+		logger.error("Testing para error");
+		logger.fatal("Testing para Fatal");
 		return "Para introducir nuevos rebeldes dirijase a /rebels";
 
 	}
