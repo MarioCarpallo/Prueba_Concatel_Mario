@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RebeldeController {
 	
 	//Frase la cual tendrá 3 variables, el rebelde, planeta, y fecha.
-	private static final String frase = "El rebelde %s fue avistado en el planeta %s el día %s";
+	private static final String frase = "El/la rebelde %s fue avistado/a en el planeta %s el día %s";
 		
 	//Inicializamos la librería log4j (Habiendola importado ya)
 	final Logger logger = Logger.getLogger(RebeldeController.class);
@@ -49,8 +49,8 @@ public class RebeldeController {
 		//Le damos formato a la fecha
 		String date = formatter.format(d);
         
-		//Control de errores (Que no entren a la raíz de la api sin nada)
-		if(!rebelde.equals("-") && !planeta.equals("-")) {
+		//Control de errores (Que no entren a la raíz de la api sin nada o con espacios)
+		if(!rebelde.equals("-") && !planeta.equals("-") && !rebelde.equals(" ") && !planeta.equals(" ")) {
 			String fraseFichero = String.format(frase, mayus(rebelde), mayus(planeta), date);
 			
 			fichero(fraseFichero);

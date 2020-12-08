@@ -11,7 +11,6 @@ public class rebelde {
 
 	//Constructor 
 	public rebelde(String rebelde, String planeta, String fecha, String frase) {
-		super();
 		this.rebelde = rebelde;
 		this.planeta = planeta;
 		this.fecha = fecha;
