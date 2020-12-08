@@ -15,59 +15,56 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RebeldeController {
 	
-	//Frase la cual tendrÃ¡ 3 variables, el rebelde, planeta, y fecha.
-	private static final String frase = "El/la rebelde %s fue avistado/a en el planeta %s el dÃ­a %s";
+	//Frase la cual tendrá 3 variables, el rebelde, planeta, y fecha.
+	private static final String frase = "El/la rebelde %s fue avistado/a en el planeta %s el día %s";
 		
-	//Inicializamos la librerÃ­a log4j (Habiendola importado ya)
-	final Logger logger = Logger.getLogger(RebeldeController.class);
+	//Inicializamos la librería log4j (Habiendola importado ya)
+	final static Logger logger = Logger.getLogger(RebeldeController.class);
 	
-	//MÃ©todo que mostrarÃ¡ un mensaje que explica donde ir para introducir los rebeldes
+	//Método que mostrará un mensaje que explica donde ir para introducir los rebeldes
 	@RequestMapping("/")
 	public String saludo() {
 		return "Para introducir nuevos rebeldes dirijase a /rebels";
-
 	}
 	
 	//Metodo para poder introducir el rebelde y el planeta con el RequestParam
 	@RequestMapping("/rebels")
-	public rebelde rebels(@RequestParam(value="rebelde", defaultValue = "-") String rebelde,
+	public static rebelde rebels(@RequestParam(value="rebelde", defaultValue = "-") String rebelde,
 						  @RequestParam(value="planeta", defaultValue = "-") String planeta) {
 		
-		//Por defecto habrÃ¡ la frase de como si hubiera un error.
+		//Por defecto existirá la frase de tal forma como si hubiera un error.
 		rebelde result = new rebelde("-", "-", "-", "Introduce un rebelde y un planeta correctos porfavor");
 		
 		try {
-		//Recogemos la fecha en milisegundos
-		System.currentTimeMillis();
 		
-		//La formateamos
-		SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy 'a las' HH:mm:ss z");
-		
-		//Creamos nueva fecha con los milisegundos obtenidos
-		Date d = new Date(System.currentTimeMillis());
-		
-		//Le damos formato a la fecha
-		String date = formatter.format(d);
-        
-		//Control de errores (Que no entren a la raÃ­z de la api sin nada o con espacios)
+		//Control de errores (Que no entren a la raíz de la api sin nada o con espacios)
 		if(!rebelde.equals("-") && !planeta.equals("-") && !rebelde.equals(" ") && !planeta.equals(" ")) {
+			
+			// Llamamos a la función para recoger la fecha/hora
+			String date = fechahora();
+			
 			String fraseFichero = String.format(frase, mayus(rebelde), mayus(planeta), date);
 			
+			// Llamamos a la función para insertarla en el fichero
 			fichero(fraseFichero);
 			
+			// Retornamos a la api el resultado total.
+			result = new rebelde(mayus(rebelde), mayus(planeta), date, fraseFichero);
+			System.out.print(result.toString());
 			return new rebelde(mayus(rebelde), mayus(planeta), date, fraseFichero);
 		}
 		}catch(Exception e) {
 			System.out.println(e);
 			logger.error("Error al acceder al apartado /rebels: "+e);
-
 		}
+		
+		// Si hay cualquier fallo se retornaría la frase por defecto.
 		return result;
 		
 		}
 	
-	//Metodo para poner la primera letra del nombre del rebelde/planeta en mayÃºscula
-	public final String mayus(String str) {
+	// Método para poner la primera letra del nombre del rebelde/planeta en mayúscula
+	public static String mayus(String str) {
 		String result = str;
 		try {
 	    if(str == null || str.isEmpty()) {
@@ -75,16 +72,22 @@ public class RebeldeController {
 	    }
 	    result = str.substring(0, 1).toUpperCase() + str.substring(1);
 		}catch(Exception e) {
-			logger.error("Error al intentar poner en mayÃºscula la letra"+e);
+			logger.error("Error al intentar poner en mayúscula la letra"+e);
 		}
 	    return result;
 	}
 	
-	//MÃ©todo para escribir en un fichero el nombre de los reveldes con el planeta y fecha.
-	public final String fichero(String frase) {
-		String ficheroReturn = "Escrito con Ã©xito";
-		
+	//Método para escribir en un fichero el nombre de los reveldes con el planeta y fecha.
+	public static String fichero(String frase) {
+		String ficheroReturn = "-";
+
 		try {
+			// Si la frase está vacía se retorna un aviso.
+			if(frase.equals(null) || frase.equals("")) {
+				ficheroReturn = "La frase está vacía";
+				return ficheroReturn;
+			}
+			
 			String ruta = "output_rebeldes/rebeldes.txt";
 			File archivo = new File(ruta);
 			BufferedWriter bw;
@@ -94,12 +97,34 @@ public class RebeldeController {
 			    bw.write(frase+"\n");
 			    bw.close();
 			}
-			
+			ficheroReturn = "Frase Agregada";
 		}catch(Exception e) {
-			ficheroReturn = "Hubo algÃºn problema: "+e;
+			ficheroReturn = "Hubo algún problema: "+e;
 			logger.error("Error al importar la frase en el fichero: "+e);
 		}
 		return ficheroReturn;
+	}
+	
+	// Método para obtener la fecha y hora con formato personalizado.
+	public static String fechahora() {
+		String fechahora = "";
+		try {
+			//Recogemos la fecha en milisegundos
+			System.currentTimeMillis();
+					
+			//La formateamos
+			SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy 'a las' HH:mm:ss z");
+					
+			//Creamos nueva fecha con los milisegundos obtenidos
+			Date d = new Date(System.currentTimeMillis());
+					
+			//Le damos formato a la fecha
+			String date = formatter.format(d);
+			fechahora = date;
+		}catch(Exception e) {
+			logger.error("Error al intentar obtener la fecha y hora: "+e);
+		}
+		return fechahora;
 	}
 	
 	

@@ -2,3 +2,7 @@
 [07-12-2020 19:44:41] [WARN ]: Testing para Aviso
 [07-12-2020 19:44:41] [ERROR]: Testing para error
 [07-12-2020 19:44:41] [FATAL]: Testing para Fatal
+2020-12-08 18:42:34 ERROR RebeldeController:27 - Error al acceder al apartado /rebels: 
+2020-12-08 19:21:45 ERROR RebeldeController:27 - Error al acceder al apartado /rebels: 
+[08-12-2020 19:26:19] [ERROR] - Error al acceder al apartado /rebels: 
+[08-12-2020 21:01:08] [ERROR] - Error al acceder al apartado /rebels: 

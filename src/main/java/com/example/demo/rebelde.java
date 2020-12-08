@@ -52,4 +52,10 @@ public class rebelde {
 		this.frase = frase;
 	}
 	
+	// Método que hace funcionar el test unitario del método Rebels.
+	  public String test() {
+		String frase = "El/la rebelde " + rebelde + " fue avistado/a en el planeta " + planeta + " el día " + fecha;
+	    return frase;
+	  }
+	
 }
