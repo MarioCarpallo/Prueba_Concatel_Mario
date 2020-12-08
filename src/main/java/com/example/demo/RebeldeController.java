@@ -24,6 +24,7 @@ public class RebeldeController {
 	//Método que mostrará un mensaje que explica donde ir para introducir los rebeldes
 	@RequestMapping("/")
 	public String saludo() {
+		logger.error("Error al acceder al apartado /rebels: ");
 		return "Para introducir nuevos rebeldes dirijase a /rebels";
 
 	}
