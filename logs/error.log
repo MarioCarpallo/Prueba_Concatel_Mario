@@ -1,0 +1,4 @@
+[07-12-2020 19:44:41] [INFO ]: Testing para Info
+[07-12-2020 19:44:41] [WARN ]: Testing para Aviso
+[07-12-2020 19:44:41] [ERROR]: Testing para error
+[07-12-2020 19:44:41] [FATAL]: Testing para Fatal

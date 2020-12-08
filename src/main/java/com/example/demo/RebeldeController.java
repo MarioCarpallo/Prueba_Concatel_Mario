@@ -61,6 +61,8 @@ public class RebeldeController {
 		}
 		}catch(Exception e) {
 			System.out.println(e);
+			logger.error("Error al acceder al apartado /rebels: "+e);
+
 		}
 		return result;
 		
@@ -75,7 +77,7 @@ public class RebeldeController {
 	    return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 	
-	public static String fichero(String frase) {
+	public final String fichero(String frase) {
 		String ficheroReturn = "Escrito con éxito";
 		
 		try {
@@ -90,6 +92,7 @@ public class RebeldeController {
 		}catch(Exception e) {
 			ficheroReturn = "Hubo algún problema: "+e;
 			System.out.print("Hubo algún problema: "+e);
+			logger.error("Error al extraer la frase en el archivo: "+e);
 		}
 		return ficheroReturn;
 	}
