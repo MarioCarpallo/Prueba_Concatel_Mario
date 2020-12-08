@@ -10,8 +10,10 @@ class RebeldeControllerTest {
 	void testRebelde() {
 		String planeta = "naboo";
 		String rebelde = "amidala";
-		rebelde resultado = RebeldeController.rebels(planeta, rebelde);
-		String[] esperado = {"Amidala", "Naboo", "-", "Introduce un rebelde y un planeta correctos porfavor"};
+		String fechaHora = RebeldeController.fechahora();
+		String resultado = RebeldeController.rebels(rebelde, planeta).test();
+		String esperado = "El/la rebelde Amidala fue avistado/a en el planeta Naboo el día "+fechaHora;
+		assertEquals(esperado, resultado);
 	}
 	
 	
@@ -25,9 +27,18 @@ class RebeldeControllerTest {
 
 	@Test
 	void testFichero() {
-		String frase = "Testing para la frase"; // Frase a agregar al archivo
-		String esperado = "Frase Agregada"; // Lo esperado será Frase agregada
+		String frase = "Test unitario para el método fichero"; // Frase a agregar al archivo
+		String esperado = "Frase Agregada"; // Lo esperado será "Frase agregada"
 		String resultado = RebeldeController.fichero(frase);
+		assertEquals(esperado, resultado);
+	}
+	
+	/* No encontré la posibilidad de hacer un test unitario de este metodo porque este lo que hace
+	 es obtener la hora actual a partir de milisegundos, no puedo definir cual será el resultado esperado */
+	@Test
+	void testFecha() {
+		String esperado = RebeldeController.fechahora();
+		String resultado = RebeldeController.fechahora();
 		assertEquals(esperado, resultado);
 	}
 

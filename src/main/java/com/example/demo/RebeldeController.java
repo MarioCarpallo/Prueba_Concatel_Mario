@@ -32,7 +32,7 @@ public class RebeldeController {
 	public static rebelde rebels(@RequestParam(value="rebelde", defaultValue = "-") String rebelde,
 						  @RequestParam(value="planeta", defaultValue = "-") String planeta) {
 		
-		//Por defecto habrá la frase de como si hubiera un error.
+		//Por defecto existirá la frase de tal forma como si hubiera un error.
 		rebelde result = new rebelde("-", "-", "-", "Introduce un rebelde y un planeta correctos porfavor");
 		
 		try {
@@ -48,7 +48,9 @@ public class RebeldeController {
 			// Llamamos a la función para insertarla en el fichero
 			fichero(fraseFichero);
 			
-			// Retornamos en la api el resultado total.
+			// Retornamos a la api el resultado total.
+			result = new rebelde(mayus(rebelde), mayus(planeta), date, fraseFichero);
+			System.out.print(result.toString());
 			return new rebelde(mayus(rebelde), mayus(planeta), date, fraseFichero);
 		}
 		}catch(Exception e) {
@@ -80,8 +82,10 @@ public class RebeldeController {
 		String ficheroReturn = "-";
 
 		try {
-			if(frase.equals("")) {
+			// Si la frase está vacía se retorna un aviso.
+			if(frase.equals(null) || frase.equals("")) {
 				ficheroReturn = "La frase está vacía";
+				return ficheroReturn;
 			}
 			
 			String ruta = "output_rebeldes/rebeldes.txt";
