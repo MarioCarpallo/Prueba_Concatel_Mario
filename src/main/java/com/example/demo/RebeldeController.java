@@ -18,15 +18,12 @@ public class RebeldeController {
 	//Frase la cual tendrá 3 variables, el rebelde, planeta, y fecha.
 	private static final String frase = "El rebelde %s fue avistado en el planeta %s el día %s";
 		
+	//Inicializamos la librería log4j (Habiendola importado ya)
 	final Logger logger = Logger.getLogger(RebeldeController.class);
-	//Mensaje donde explica donde ir para introducir los rebeldes
+	
+	//Método que mostrará un mensaje que explica donde ir para introducir los rebeldes
 	@RequestMapping("/")
 	public String saludo() {
-		logger.debug("Testing para Debug");
-		logger.info("Testing para Info");
-		logger.warn("Testing para Aviso");
-		logger.error("Testing para error");
-		logger.fatal("Testing para Fatal");
 		return "Para introducir nuevos rebeldes dirijase a /rebels";
 
 	}
@@ -36,10 +33,11 @@ public class RebeldeController {
 	public rebelde rebels(@RequestParam(value="rebelde", defaultValue = "-") String rebelde,
 						  @RequestParam(value="planeta", defaultValue = "-") String planeta) {
 		
+		//Por defecto habrá la frase de como si hubiera un error.
 		rebelde result = new rebelde("-", "-", "-", "Introduce un rebelde y un planeta correctos porfavor");
 		
 		try {
-		//Recojemos la fecha en milisegundos
+		//Recogemos la fecha en milisegundos
 		System.currentTimeMillis();
 		
 		//La formateamos
@@ -53,11 +51,11 @@ public class RebeldeController {
         
 		//Control de errores (Que no entren a la raíz de la api sin nada)
 		if(!rebelde.equals("-") && !planeta.equals("-")) {
-			String fraseFichero = String.format(frase, capitalize(rebelde), capitalize(planeta), date);
+			String fraseFichero = String.format(frase, mayus(rebelde), mayus(planeta), date);
 			
 			fichero(fraseFichero);
 			
-			return new rebelde(capitalize(rebelde), capitalize(planeta), date, fraseFichero);
+			return new rebelde(mayus(rebelde), mayus(planeta), date, fraseFichero);
 		}
 		}catch(Exception e) {
 			System.out.println(e);
@@ -69,14 +67,20 @@ public class RebeldeController {
 		}
 	
 	//Metodo para poner la primera letra del nombre del rebelde/planeta en mayúscula
-	public static String capitalize(String str) {
+	public final String mayus(String str) {
+		String result = str;
+		try {
 	    if(str == null || str.isEmpty()) {
 	        return str;
 	    }
-
-	    return str.substring(0, 1).toUpperCase() + str.substring(1);
+	    result = str.substring(0, 1).toUpperCase() + str.substring(1);
+		}catch(Exception e) {
+			logger.error("Error al intentar poner en mayúscula la letra"+e);
+		}
+	    return result;
 	}
 	
+	//Método para escribir en un fichero el nombre de los reveldes con el planeta y fecha.
 	public final String fichero(String frase) {
 		String ficheroReturn = "Escrito con éxito";
 		
@@ -85,14 +89,15 @@ public class RebeldeController {
 			File archivo = new File(ruta);
 			BufferedWriter bw;
 			bw = new BufferedWriter(new FileWriter(archivo, true));
+			
 			if(archivo.exists()) {
 			    bw.write(frase+"\n");
 			    bw.close();
 			}
+			
 		}catch(Exception e) {
 			ficheroReturn = "Hubo algún problema: "+e;
-			System.out.print("Hubo algún problema: "+e);
-			logger.error("Error al extraer la frase en el archivo: "+e);
+			logger.error("Error al importar la frase en el fichero: "+e);
 		}
 		return ficheroReturn;
 	}
